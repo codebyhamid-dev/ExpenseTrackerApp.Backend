@@ -20,8 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Expense.Domain\" />
-    <Folder Include="Expense.EFCore\" />
+    <Folder Include="Controllers\" />
     <Folder Include="Expense.Contracts\" />
     <Folder Include="Expense.Services\" />
   </ItemGroup>

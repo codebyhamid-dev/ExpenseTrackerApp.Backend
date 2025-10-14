@@ -26,7 +26,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
     options.Password.RequiredLength = 8;
 })
     .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
+    .AddDefaultTokenProviders()
+    .AddApiEndpoints(); // ? Built-in endpoints added here
 
 // ------------------------
 // Add controllers and Swagger
@@ -52,5 +53,9 @@ app.UseAuthentication(); // <-- Added
 app.UseAuthorization();
 
 app.MapControllers();
+// ------------------------
+// ? Built-in Identity Endpoints
+// ------------------------
+app.MapIdentityApi<ApplicationUser>(); // ?? exposes /register, /login, /logout, etc.
 
 app.Run();

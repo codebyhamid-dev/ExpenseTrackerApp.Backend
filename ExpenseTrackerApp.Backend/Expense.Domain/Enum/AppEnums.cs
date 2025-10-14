@@ -9,13 +9,6 @@
             Expense = 1
         }
 
-        // 🔹 Used in Transaction to identify income or expense type
-        public enum TransactionType
-        {
-            Income = 0,
-            Expense = 1
-        }
-
         // 🔹 Payment options
         public enum PaymentMode
         {

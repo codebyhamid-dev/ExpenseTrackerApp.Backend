@@ -17,19 +17,6 @@ namespace ExpenseTrackerApp.Backend.Expense.EFCore
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ApplicationUser>(entity =>
-            {
-                entity.ToTable("Users");
-
-                entity.Property(u => u.Name)
-                      .HasMaxLength(100)
-                      .IsRequired(false);
-
-                // Store Base64 image without length limit
-                entity.Property(u => u.ProfilePicUrl)
-                      .HasColumnType("TEXT"); // or "nvarchar(max)" for SQL Server
-            });
-
             // ------------------------
             // Category
             // ------------------------
@@ -37,12 +24,10 @@ namespace ExpenseTrackerApp.Backend.Expense.EFCore
             modelBuilder.Entity<Category>(entity =>
             {
                 entity.ToTable("Categories");
-
                 // Name is required and max length 100
                 entity.Property(c => c.Name)
                       .HasMaxLength(100)
                       .IsRequired();
-
                 // One user → many categories
                 entity.HasOne(c => c.User)
                       .WithMany(u => u.Categories)
@@ -56,15 +41,12 @@ namespace ExpenseTrackerApp.Backend.Expense.EFCore
             modelBuilder.Entity<Transaction>(entity =>
             {
                 entity.ToTable("Transactions");
-
                 // Description max length 500
                 entity.Property(t => t.Description)
                       .HasMaxLength(500);
-
                 // Amount precision
                 entity.Property(t => t.Amount)
                       .HasPrecision(18, 2);
-
                 // One user → many transactions
                 entity.HasOne(t => t.User)
                       .WithMany(u => u.Transactions)
