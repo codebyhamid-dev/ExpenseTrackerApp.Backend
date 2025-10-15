@@ -20,8 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Expense.Contracts\" />
     <Folder Include="Expense.Services\" />
   </ItemGroup>
 
