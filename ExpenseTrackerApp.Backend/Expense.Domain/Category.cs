@@ -11,7 +11,7 @@ namespace ExpenseTrackerApp.Backend.Expense.Domain
         public Guid? UserId { get; set; }
         [Required]
         public string Name { get; set; }           // Example: "Food", "Salary", "Transport"
-        public CategoryType Type { get; set; }     // Income or Expense
+        public TransactionType Type { get; set; }     // Income or Expense
         public string? Icon { get; set; }           // Optional emoji/icon for UI
 
         // Relationships

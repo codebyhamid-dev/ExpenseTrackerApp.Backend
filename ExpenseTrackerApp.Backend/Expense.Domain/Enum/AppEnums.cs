@@ -3,7 +3,7 @@
     public static class AppEnums
     {
         // 🔹 Whether a transaction or category is income or expense
-        public enum CategoryType
+        public enum TransactionType
         {
             Income = 0,
             Expense = 1

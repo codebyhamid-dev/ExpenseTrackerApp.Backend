@@ -11,7 +11,7 @@ namespace ExpenseTrackerApp.Backend.Expense.Domain
         public Guid? UserId { get; set; }
         public Guid? CategoryId { get; set; }
 
-        public CategoryType TransactionType { get; set; }  // Income / Expense
+        public TransactionType TransactionType { get; set; }  // Income / Expense
         public PaymentMode PaymentMode { get; set; }       // Cash / Bank / Card
 
         [Required]
