@@ -9,31 +9,12 @@ namespace ExpenseTrackerApp.Backend.Expense.EFCore
     public class AppDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-
-        public DbSet<Category> Categories { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // ------------------------
-            // Category
-            // ------------------------
-            
-            modelBuilder.Entity<Category>(entity =>
-            {
-                entity.ToTable("Categories");
-                // Name is required and max length 100
-                entity.Property(c => c.Name)
-                      .HasMaxLength(100)
-                      .IsRequired();
-                // One user → many categories
-                entity.HasOne(c => c.User)
-                      .WithMany(u => u.Categories)
-                      .HasForeignKey(c => c.UserId)
-                      .OnDelete(DeleteBehavior.Cascade);
-            });
 
             // ------------------------
             // Transaction
@@ -52,12 +33,6 @@ namespace ExpenseTrackerApp.Backend.Expense.EFCore
                       .WithMany(u => u.Transactions)
                       .HasForeignKey(t => t.UserId)
                       .OnDelete(DeleteBehavior.Cascade);
-
-                // One category → many transactions
-                entity.HasOne(t => t.Category)
-                      .WithMany(c => c.Transactions)
-                      .HasForeignKey(t => t.CategoryId)
-                      .OnDelete(DeleteBehavior.Restrict);
             });
         }
 

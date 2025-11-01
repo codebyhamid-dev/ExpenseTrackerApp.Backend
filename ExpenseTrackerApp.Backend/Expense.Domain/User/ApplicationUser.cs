@@ -9,7 +9,7 @@ namespace ExpenseTrackerApp.Backend.Expense.Domain.User
         // ✅ Make this nullable
         public string? ProfilePicUrl { get; set; }
 
-        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow; // User creation time
 
         // Refresh Token fields
         public string? RefreshToken { get; set; }
@@ -17,7 +17,6 @@ namespace ExpenseTrackerApp.Backend.Expense.Domain.User
 
         // Relationships
         public ICollection<Transaction>? Transactions { get; set; }
-        public ICollection<Category>? Categories { get; set; }
 
     }
 }

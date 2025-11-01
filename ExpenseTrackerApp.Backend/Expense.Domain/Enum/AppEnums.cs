@@ -5,8 +5,8 @@
         // 🔹 Whether a transaction or category is income or expense
         public enum TransactionType
         {
-            Income = 0,
-            Expense = 1
+            Credit = 0,
+            Debit = 1
         }
 
         // 🔹 Payment options
