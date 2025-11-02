@@ -11,6 +11,7 @@ namespace ExpenseTrackerApp.Backend.Expense.Domain
         public TransactionType TransactionType { get; set; }  // credit / debit 
         public PaymentMode PaymentMode { get; set; }       // Cash / Bank / Card
         public string? Category { get; set; } 
+
         [Required]
         public decimal Amount { get; set; }
         public string? Description { get; set; }
