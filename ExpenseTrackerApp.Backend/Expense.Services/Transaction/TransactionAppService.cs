@@ -14,9 +14,20 @@ namespace ExpenseTrackerApp.Backend.Expense.Services.Transaction
             _context = context;
             _mapper = mapper;
         }
-        public Task<TransactionReadDto> CreateTransactionAsync(TransactionCreateDto transactionCreateDto)
+        public async Task<TransactionReadDto> CreateTransactionAsync(TransactionCreateDto transactionCreateDto)
         {
-            throw new NotImplementedException();
+            // Map DTO → Domain model
+            var transaction = _mapper.Map<Domain.Entities.Transaction>(transactionCreateDto);
+            transaction.Id = Guid.NewGuid();
+            transaction.CreatedAt = DateTimeOffset.UtcNow;
+
+            // Save to database
+            await _context.Transactions.AddAsync(transaction);
+            await _context.SaveChangesAsync();
+
+            // Map Domain → Read DTO
+            var result = _mapper.Map<TransactionReadDto>(transaction);
+            return result;
         }
 
         public Task DeleteTransactionAsync(Guid transactionId)

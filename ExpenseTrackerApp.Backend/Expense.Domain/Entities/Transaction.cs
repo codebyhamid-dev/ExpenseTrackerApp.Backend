@@ -7,7 +7,7 @@ namespace ExpenseTrackerApp.Backend.Expense.Domain.Entities
     public class Transaction
     {
         public Guid Id { get; set; }
-        public Guid? UserId { get; set; }
+        public Guid UserId { get; set; }
         public TransactionType TransactionType { get; set; }  // credit / debit 
         public PaymentMode PaymentMode { get; set; }       // Cash / Bank / Card
         public string? Category { get; set; } 

@@ -1,6 +1,7 @@
 using ExpenseTrackerApp.Backend.Expense.Contracts.Transactions;
 using ExpenseTrackerApp.Backend.Expense.Domain.User;
 using ExpenseTrackerApp.Backend.Expense.EFCore;
+using ExpenseTrackerApp.Backend.Expense.Services;
 using ExpenseTrackerApp.Backend.Expense.Services.Transaction;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -16,8 +17,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
-// register TransactionAppService
+// register TransactionAppService and AutoMapper
 builder.Services.AddScoped<ITransactionAppService, TransactionAppService>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 
 // ------------------------
 // Configure Identity
