@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using ExpenseTrackerApp.Backend.Expense.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace ExpenseTrackerApp.Backend.Expense.Domain.User
 {

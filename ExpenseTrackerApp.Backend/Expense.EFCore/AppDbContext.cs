@@ -1,4 +1,4 @@
-﻿using ExpenseTrackerApp.Backend.Expense.Domain;
+﻿using ExpenseTrackerApp.Backend.Expense.Domain.Entities;
 using ExpenseTrackerApp.Backend.Expense.Domain.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -24,7 +24,7 @@ namespace ExpenseTrackerApp.Backend.Expense.EFCore
                 entity.ToTable("Transactions");
                 // Description max length 500
                 entity.Property(t => t.Description)
-                      .HasMaxLength(500);
+                      .HasMaxLength(1000);
                 // Amount precision
                 entity.Property(t => t.Amount)
                       .HasPrecision(18, 2);
