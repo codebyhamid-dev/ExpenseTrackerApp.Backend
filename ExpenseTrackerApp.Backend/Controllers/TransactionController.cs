@@ -21,5 +21,26 @@ namespace ExpenseTrackerApp.Backend.Controllers
 
             return await _transactionAppService.CreateTransactionAsync(transactionCreateDto);
         }
+        [HttpGet("get-all-transactions")]
+        public async Task<List<TransactionReadDto>> GetAllTransactions()
+        {
+            return await _transactionAppService.GetAllTransactionsAsync();
+        }
+        [HttpGet("get-transaction-by-id/{transactionId}")]
+        public async Task<TransactionReadDto> GetTransactionById([FromRoute] Guid transactionId)
+        {
+            return await _transactionAppService.GetTransactionByIdAsync(transactionId);
+        }
+        [HttpPost("update-transaction/{transactionId}")]
+        public async Task<TransactionReadDto> UpdateTransaction([FromRoute] Guid transactionId, [FromBody] TransactionUpdateDto transactionUpdateDto)
+        {
+            return await _transactionAppService.UpdateTransactionAsync(transactionId, transactionUpdateDto);
+        }
+        [HttpDelete("delete-transaction/{transactionId}")]
+        public async Task DeleteTransaction([FromRoute] Guid transactionId)
+        {
+            await _transactionAppService.DeleteTransactionAsync(transactionId);
+        }
+
     }
 }

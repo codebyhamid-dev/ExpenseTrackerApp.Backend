@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ExpenseTrackerApp.Backend.Expense.Contracts.Transactions;
 using ExpenseTrackerApp.Backend.Expense.EFCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTrackerApp.Backend.Expense.Services.Transaction
 {
@@ -30,24 +31,51 @@ namespace ExpenseTrackerApp.Backend.Expense.Services.Transaction
             return result;
         }
 
-        public Task DeleteTransactionAsync(Guid transactionId)
+        public async Task DeleteTransactionAsync(Guid transactionId)
         {
-            throw new NotImplementedException();
+            var transaction=await _context.Transactions.FirstOrDefaultAsync(t=>t.Id==transactionId);
+            if(transaction!=null)
+            {
+                _context.Transactions.Remove(transaction);
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public Task<List<TransactionReadDto>> GetAllTransactionsAsync()
+        public async Task<List<TransactionReadDto>> GetAllTransactionsAsync()
         {
-            throw new NotImplementedException();
+            var transactions=await _context.Transactions.ToListAsync(); 
+            if(transactions==null || transactions.Count==0)
+            {
+                return new List<TransactionReadDto>();
+            }
+            var result=_mapper.Map<List<TransactionReadDto>>(transactions);
+            return result;
         }
 
-        public Task<TransactionReadDto> GetTransactionByIdAsync(Guid transactionId)
+        public async Task<TransactionReadDto> GetTransactionByIdAsync(Guid transactionId)
         {
-            throw new NotImplementedException();
+            var transaction=await _context.Transactions.FirstOrDefaultAsync(t=>t.Id==transactionId);
+            if(transaction==null)
+            {
+                return null;
+            }
+            var result=_mapper.Map<TransactionReadDto>(transaction);
+            return result;
         }
 
-        public Task<TransactionReadDto> UpdateTransactionAsync(Guid transactionId, TransactionUpdateDto transactionUpdateDto)
+        public async Task<TransactionReadDto> UpdateTransactionAsync(Guid transactionId, TransactionUpdateDto transactionUpdateDto)
         {
-            throw new NotImplementedException();
+            var transaction=await _context.Transactions.FirstOrDefaultAsync(t=>t.Id==transactionId);
+            if(transaction==null)
+            {
+                return null;
+            }
+            // Map updated fields from DTO to Domain model
+            _mapper.Map(transactionUpdateDto, transaction);
+            _context.Transactions.Update(transaction);
+            await _context.SaveChangesAsync();
+            var result=_mapper.Map<TransactionReadDto>(transaction);
+            return result;
         }
     }
 }
