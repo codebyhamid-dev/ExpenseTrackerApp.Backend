@@ -2,7 +2,7 @@
 {
     public interface ITransactionAppService
     {
-        Task<List<TransactionReadDto>> GetAllTransactionsAsync();
+        Task<PagedResultDto<TransactionReadDto>> GetAllTransactionsAsync(TransactionInputDto inputDto);
         Task<TransactionReadDto> GetTransactionByIdAsync(Guid transactionId);
         Task<TransactionReadDto> CreateTransactionAsync(TransactionCreateDto transactionCreateDto);
         Task<TransactionReadDto> UpdateTransactionAsync(Guid transactionId, TransactionUpdateDto transactionUpdateDto);

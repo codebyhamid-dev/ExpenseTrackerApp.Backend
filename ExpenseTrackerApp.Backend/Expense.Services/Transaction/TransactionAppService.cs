@@ -2,6 +2,7 @@
 using ExpenseTrackerApp.Backend.Expense.Contracts.Transactions;
 using ExpenseTrackerApp.Backend.Expense.EFCore;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ExpenseTrackerApp.Backend.Expense.Services.Transaction
 {
@@ -41,15 +42,60 @@ namespace ExpenseTrackerApp.Backend.Expense.Services.Transaction
             }
         }
 
-        public async Task<List<TransactionReadDto>> GetAllTransactionsAsync()
+        public async Task<PagedResultDto<TransactionReadDto>> GetAllTransactionsAsync(TransactionInputDto inputDto)
         {
-            var transactions=await _context.Transactions.ToListAsync(); 
-            if(transactions==null || transactions.Count==0)
+            var transactions = _context.Transactions.AsQueryable();
+
+            // 🔍 SIMPLE TEXT SEARCH (Category + Description)
+            if (!string.IsNullOrWhiteSpace(inputDto.Search))
             {
-                return new List<TransactionReadDto>();
+                var keyword = inputDto.Search.ToLower();
+                transactions = transactions.Where(t =>
+                    (t.Category != null && t.Category.ToLower().Contains(keyword))
+                );
             }
-            var result=_mapper.Map<List<TransactionReadDto>>(transactions);
-            return result;
+            // 🎯 CATEGORY FILTER
+            if (!string.IsNullOrWhiteSpace(inputDto.Category))
+            {
+                string cat = inputDto.Category.ToLower();
+                transactions = transactions.Where(t =>
+                    t.Category != null && t.Category.ToLower() == cat
+                );
+            }
+            // 💰 MIN AMOUNT FILTER
+            if (inputDto.MinAmount.HasValue)
+                transactions = transactions.Where(t => t.Amount >= inputDto.MinAmount.Value);
+
+            // 💰 MAX AMOUNT FILTER
+            if (inputDto.MaxAmount.HasValue)
+                transactions = transactions.Where(t => t.Amount <= inputDto.MaxAmount.Value);
+
+            // ➕➖ TYPE (Credit / Debit)
+            if (inputDto.TransactionType.HasValue)
+                transactions = transactions.Where(t => t.TransactionType == inputDto.TransactionType);
+
+            // 💳 PAYMENT MODE: Cash / Bank / Card
+            if (inputDto.PaymentMode.HasValue)
+                transactions = transactions.Where(t => t.PaymentMode == inputDto.PaymentMode);
+
+            // 📌 SORTING BY CREATED TIME (default: newest first)
+            transactions = inputDto.SortDescending
+                ? transactions.OrderByDescending(t => t.CreatedAt)
+                : transactions.OrderBy(t => t.CreatedAt);
+
+            // ✔ Total
+            int totalCount = await transactions.CountAsync();
+            // 📄 PAGINATION
+            var items = await transactions
+                .Skip(inputDto.SkipCount)
+                .Take(inputDto.MaxResultCount)
+                .ToListAsync();
+
+            return new PagedResultDto<TransactionReadDto>
+            {
+                Items = _mapper.Map<List<TransactionReadDto>>(items),
+                TotalCount = totalCount
+            };
         }
 
         public async Task<TransactionReadDto> GetTransactionByIdAsync(Guid transactionId)

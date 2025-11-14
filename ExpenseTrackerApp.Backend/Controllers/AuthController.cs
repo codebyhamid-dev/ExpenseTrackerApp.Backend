@@ -25,7 +25,7 @@ namespace ExpenseTrackerApp.Backend.Controllers
         // ------------------------
         // POST: api/auth/register
         // ------------------------
-        [HttpPost("user-register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
             if (!ModelState.IsValid)
@@ -65,7 +65,7 @@ namespace ExpenseTrackerApp.Backend.Controllers
         // ------------------------
         // POST: api/auth/login
         // ------------------------
-        [HttpPost("user-login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
             if (!ModelState.IsValid)
