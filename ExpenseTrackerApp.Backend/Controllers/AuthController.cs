@@ -91,6 +91,7 @@ namespace ExpenseTrackerApp.Backend.Controllers
                 message = "User logged in successfully.",
                 Accesstoken = jwtToken,
                 RefreshToken = refreshToken,
+                RefreshTokenExpiry = user.RefreshTokenExpiryTime // send expiry
             });
         }
         //generate access token
@@ -126,6 +127,36 @@ namespace ExpenseTrackerApp.Backend.Controllers
             rng.GetBytes(randomBytes);
             return Convert.ToBase64String(randomBytes);
         }
+        // ------------------------
+        // POST: api/auth/logout
+        // ------------------------
+        // POST: api/auth/logout
+        // ------------------------
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout([FromBody] LogoutDto dto)
+        {
+            if (string.IsNullOrEmpty(dto.RefreshToken))
+                return BadRequest(new { message = "Refresh token is required." });
+
+            // find user with this refresh token
+            var user = _userManager.Users.FirstOrDefault(u => u.RefreshToken == dto.RefreshToken);
+
+            if (user == null)
+                return Unauthorized(new { message = "Invalid refresh token." });
+
+            // remove refresh token
+            user.RefreshToken = null;
+            user.RefreshTokenExpiryTime = null;
+
+            await _userManager.UpdateAsync(user);
+
+            return Ok(new
+            {
+                success = true,
+                message = "User logged out successfully."
+            });
+        }
+
 
     }
 }
