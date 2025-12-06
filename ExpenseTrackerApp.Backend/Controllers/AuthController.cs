@@ -91,7 +91,14 @@ namespace ExpenseTrackerApp.Backend.Controllers
                 message = "User logged in successfully.",
                 Accesstoken = jwtToken,
                 RefreshToken = refreshToken,
-                RefreshTokenExpiry = user.RefreshTokenExpiryTime // send expiry
+                RefreshTokenExpiry = user.RefreshTokenExpiryTime, // send expiry
+                user = new
+                {
+                    id = user.Id,
+                    name = user.Name,
+                    email = user.Email,
+                    username = user.UserName,
+                }
             });
         }
         //generate access token
@@ -102,8 +109,9 @@ namespace ExpenseTrackerApp.Backend.Controllers
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("name", user.Name ?? string.Empty)
+                new Claim(JwtRegisteredClaimNames.Email, user.Email ?? ""),
+                new Claim("name", user.Name ?? ""),
+                new Claim("username", user.UserName ?? "")
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
@@ -127,8 +135,7 @@ namespace ExpenseTrackerApp.Backend.Controllers
             rng.GetBytes(randomBytes);
             return Convert.ToBase64String(randomBytes);
         }
-        // ------------------------
-        // POST: api/auth/logout
+      
         // ------------------------
         // POST: api/auth/logout
         // ------------------------
