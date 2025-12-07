@@ -42,5 +42,10 @@ namespace ExpenseTrackerApp.Backend.Controllers
             await _transactionAppService.DeleteTransactionAsync(transactionId);
         }
 
+        [HttpGet("get-transaction-dashboard-cards")]
+        public async Task<TransactionDashboardCardsDto> GetTransactionDashboardCards()
+        {
+            return await _transactionAppService.GetTransactionDashboardCardsAsync();
+        }
     }
 }

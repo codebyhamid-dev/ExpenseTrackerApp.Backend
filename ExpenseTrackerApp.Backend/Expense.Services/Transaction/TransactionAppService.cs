@@ -108,6 +108,26 @@ namespace ExpenseTrackerApp.Backend.Expense.Services.Transaction
             var result=_mapper.Map<TransactionReadDto>(transaction);
             return result;
         }
+        // Dashboard Cards
+        public Task<TransactionDashboardCardsDto> GetTransactionDashboardCardsAsync()
+        {
+            var totalIncome = _context.Transactions
+                .Where(t => t.TransactionType == Domain.Enum.AppEnums.TransactionType.Credit)
+                .Sum(t => (decimal?)t.Amount) ?? 0;
+            var totalExpense = _context.Transactions
+                .Where(t => t.TransactionType == Domain.Enum.AppEnums.TransactionType.Debit)
+                .Sum(t => (decimal?)t.Amount) ?? 0;
+            var balance = totalIncome - totalExpense;
+            var totalTransactions = _context.Transactions.Count();
+            var dashboardCards = new TransactionDashboardCardsDto
+            {
+                TotalIncome = totalIncome,
+                TotalExpense = totalExpense,
+                Balance = balance,
+                TotalTransactions = totalTransactions
+            };
+            return Task.FromResult(dashboardCards);
+        }
 
         public async Task<TransactionReadDto> UpdateTransactionAsync(Guid transactionId, TransactionUpdateDto transactionUpdateDto)
         {

@@ -7,5 +7,6 @@
         Task<TransactionReadDto> CreateTransactionAsync(TransactionCreateDto transactionCreateDto);
         Task<TransactionReadDto> UpdateTransactionAsync(Guid transactionId, TransactionUpdateDto transactionUpdateDto);
         Task DeleteTransactionAsync(Guid transactionId);
+        Task<TransactionDashboardCardsDto> GetTransactionDashboardCardsAsync();
     }
 }
