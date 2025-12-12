@@ -108,26 +108,7 @@ namespace ExpenseTrackerApp.Backend.Expense.Services.Transaction
             var result=_mapper.Map<TransactionReadDto>(transaction);
             return result;
         }
-        // Dashboard Cards
-        public Task<TransactionDashboardCardsDto> GetTransactionDashboardCardsAsync()
-        {
-            var totalIncome = _context.Transactions
-                .Where(t => t.TransactionType == Domain.Enum.AppEnums.TransactionType.Credit)
-                .Sum(t => (decimal?)t.Amount) ?? 0;
-            var totalExpense = _context.Transactions
-                .Where(t => t.TransactionType == Domain.Enum.AppEnums.TransactionType.Debit)
-                .Sum(t => (decimal?)t.Amount) ?? 0;
-            var balance = totalIncome - totalExpense;
-            var totalTransactions = _context.Transactions.Count();
-            var dashboardCards = new TransactionDashboardCardsDto
-            {
-                TotalIncome = totalIncome,
-                TotalExpense = totalExpense,
-                Balance = balance,
-                TotalTransactions = totalTransactions
-            };
-            return Task.FromResult(dashboardCards);
-        }
+
 
         public async Task<TransactionReadDto> UpdateTransactionAsync(Guid transactionId, TransactionUpdateDto transactionUpdateDto)
         {
@@ -141,6 +122,61 @@ namespace ExpenseTrackerApp.Backend.Expense.Services.Transaction
             _context.Transactions.Update(transaction);
             await _context.SaveChangesAsync();
             var result=_mapper.Map<TransactionReadDto>(transaction);
+            return result;
+        }
+
+        // Dashboard Cards
+        public async Task<TransactionDashboardCardsDto> GetTransactionDashboardCardsAsync()
+        {
+            // Total Income
+            var totalIncome = await _context.Transactions
+                .Where(t => t.TransactionType == Domain.Enum.AppEnums.TransactionType.Credit)
+                .SumAsync(t => (decimal?)t.Amount) ?? 0;
+
+            // Total Expense
+            var totalExpense = await _context.Transactions
+                .Where(t => t.TransactionType == Domain.Enum.AppEnums.TransactionType.Debit)
+                .SumAsync(t => (decimal?)t.Amount) ?? 0;
+
+            // Total transaction count
+            var totalTransactions = await _context.Transactions.CountAsync();
+
+            // Balance
+            var balance = totalIncome - totalExpense;
+
+            return new TransactionDashboardCardsDto
+            {
+                TotalIncome = totalIncome,
+                TotalExpense = totalExpense,
+                Balance = balance,
+                TotalTransactions = totalTransactions
+            };
+        }
+
+
+        // Dashboard Chart
+        public async Task<List<DashbaordChartDto>> GetDashbaordChartAsync()
+        {
+            // Get all transactions and group by category
+            var transactions = await _context.Transactions
+                .GroupBy(t => t.Category)
+                .Select(g => new
+                {
+                    Category = g.Key,
+                    Amount = g.Sum(x => x.Amount)
+                })
+                .ToListAsync();
+            // Calculate total sum for percentage
+            var totalAmountt= transactions.Sum(x => x.Amount);
+
+            // Map to DTO
+            var result = transactions.Select(t => new DashbaordChartDto
+            {
+                Category = t.Category,
+                Amount = t.Amount,
+                Percentage = totalAmountt == 0 ? 0 : Math.Round((t.Amount / totalAmountt) * 100, 2)
+            })
+            .ToList();
             return result;
         }
     }

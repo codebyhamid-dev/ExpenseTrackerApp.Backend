@@ -8,5 +8,6 @@
         Task<TransactionReadDto> UpdateTransactionAsync(Guid transactionId, TransactionUpdateDto transactionUpdateDto);
         Task DeleteTransactionAsync(Guid transactionId);
         Task<TransactionDashboardCardsDto> GetTransactionDashboardCardsAsync();
+        Task<List<DashbaordChartDto>> GetDashbaordChartAsync();
     }
 }
