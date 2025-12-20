@@ -94,6 +94,7 @@ namespace ExpenseTrackerApp.Backend.Controllers
                 RefreshTokenExpiry = user.RefreshTokenExpiryTime, // send expiry
                 user = new
                 {
+                    userId= user.Id,    
                     name = user.Name,
                     email = user.Email,
                 }
