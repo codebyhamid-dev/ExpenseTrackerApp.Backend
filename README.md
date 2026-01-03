@@ -5,7 +5,9 @@ An Expense Tracker Web App built with ASP.NET Core Web API that helps users mana
 **🚀 Features**
 
 User registration and login
+
 Secure authentication using JWT tokens
+
 User management with ASP.NET Core Identity
 Create, update, view, and delete expense transactions
 Support for income and expense tracking
