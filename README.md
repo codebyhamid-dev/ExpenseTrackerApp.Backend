@@ -45,8 +45,8 @@ Repository Pattern
 
 Swagger / OpenAPI for API documentation
 
-**📂 Project Structure
-**
+📂 Project Structure
+
 The solution follows a clean, layered architecture inspired by Domain-Driven Design (DDD) principles.
 Each layer has a clear responsibility, improving maintainability, scalability, and testability of the application.
 This structure ensures that business logic, data access, contracts, and API concerns remain properly separated.
