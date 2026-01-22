@@ -62,5 +62,3 @@ All secured endpoints require JWT authentication, ensuring only authorized users
 <img width="718" height="227" alt="image" src="https://github.com/user-attachments/assets/783bd011-f178-4c5c-ae3b-d5d6f1173ad5" />
 <img width="718" height="576" alt="image" src="https://github.com/user-attachments/assets/c867e740-07d7-4c1c-9b57-2a53e8efbebc" />
 <img width="714" height="360" alt="image" src="https://github.com/user-attachments/assets/72e64bf2-ecd5-4e93-ace9-edbd7903d680" />
-
-The solution follows a clean, layered architecture to keep concerns separated and the codebase maintainable.
